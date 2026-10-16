@@ -169,6 +169,7 @@ enum class Page : std::uint8_t {
     states,
     missionState,
     positions,
+    packageAabbs,
     behaviors,
     script,
 };
@@ -182,7 +183,7 @@ struct PageRow final {
 };
 
 /** The navigation order. Actions first, then the read-only pages. */
-constexpr std::array<PageRow, 20> kPages{{
+constexpr std::array<PageRow, 21> kPages{{
     {Page::squads, "Squads", "Place an authored squad.", marker::WorldPage::squads},
     {Page::idles, "Idles", "Start an actor's authored state.", marker::WorldPage::squads},
     {Page::combatants, "Combatants", "Bind actors, edit channels and try animation sequences."},
@@ -203,6 +204,10 @@ constexpr std::array<PageRow, 20> kPages{{
     {Page::positions,
      "Positions",
      "Package positions no slot claims.",
+     marker::WorldPage::positions},
+    {Page::packageAabbs,
+     "Package AABBs",
+     "Read-only package AABB identities.",
      marker::WorldPage::positions},
     {Page::behaviors, "Behaviors", "Compiled behavior roots. No action."},
     {Page::script, "Script", "Mission VM state and its output lane."},
@@ -289,6 +294,9 @@ void draw_page(const PageRow& row,
         return;
     case Page::positions:
         scriptable_browser::draw_positions(&instance);
+        return;
+    case Page::packageAabbs:
+        scriptable_browser::draw_package_aabbs(&instance);
         return;
     case Page::behaviors:
         sdk_mission_view::draw_compiled_behaviors(view);

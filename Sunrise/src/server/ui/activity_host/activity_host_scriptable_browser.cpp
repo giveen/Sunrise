@@ -22,6 +22,7 @@
 #include "../../activity/host_runtime.h"
 #include "../../bap/runtime.h"
 #include "activity_host_authored_anchors.h"
+#include "activity_host_package_aabbs.h"
 #include "activity_host_device_probe.h"
 #include "activity_host_package_tag_names.h"
 #include "activity_host_scriptable_details.h"
@@ -633,6 +634,7 @@ enum class Page : std::uint8_t {
     devices,
     triggers,
     positions,
+    packageAabbs,
 };
 
 /** Draws the slot-backed list for one page, then that page's action or monitor block. */
@@ -670,6 +672,12 @@ void draw_page(const catalog::Snapshot& snapshot,
         const authored_anchors::Filters filters{
             &g_filter, g_bubbleFilter, g_stateFilter, g_scopeFilter};
         authored_anchors::draw_positions(snapshot, instance, filters);
+        return;
+    }
+    case Page::packageAabbs: {
+        const authored_anchors::Filters filters{
+            &g_filter, g_bubbleFilter, g_stateFilter, g_scopeFilter};
+        package_aabbs::draw(snapshot, instance, filters);
         return;
     }
     }
@@ -762,6 +770,11 @@ void draw_triggers(const host::InstanceSnapshot* instance) noexcept {
 /** Draws package positions that no slot claims. */
 void draw_positions(const host::InstanceSnapshot* instance) noexcept {
     draw_contents(instance, Page::positions);
+}
+
+/** Draws package AABBs as read-only identities until an exact slot link exists. */
+void draw_package_aabbs(const host::InstanceSnapshot* instance) noexcept {
+    draw_contents(instance, Page::packageAabbs);
 }
 
 } // namespace sunrise::server::ui::activity_host::scriptable_browser

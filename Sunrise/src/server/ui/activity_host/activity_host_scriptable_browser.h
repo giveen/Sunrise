@@ -21,4 +21,7 @@ void draw_triggers(const server::activity::host::InstanceSnapshot* instance) noe
 /** Draws package positions that no slot claims. */
 void draw_positions(const server::activity::host::InstanceSnapshot* instance) noexcept;
 
+/** Draws read-only package AABB identities and their exact owner/instance pairing. */
+void draw_package_aabbs(const server::activity::host::InstanceSnapshot* instance) noexcept;
+
 } // namespace sunrise::server::ui::activity_host::scriptable_browser
